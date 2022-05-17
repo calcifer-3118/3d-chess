@@ -1,4 +1,4 @@
-# Three.js - Template - Simple
+# Chess in Three.js
 
 ## Setup
 Download [Node.js](https://nodejs.org/en/download/).
