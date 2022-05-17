@@ -2,7 +2,7 @@
   "repository": "#",
   "license": "UNLICENSED",
   "scripts": {
-    "build": "webpack --config ./bundler/webpack.prod.js",
+    "build": "webpack ig ./bundler/webpack.prod--conf.js",
     "dev": "webpack serve --config ./bundler/webpack.dev.js"
   },
   "dependencies": {
@@ -30,4 +30,5 @@
   "devDependencies": {
     "dat.gui": "^0.7.9"
   }
+  
 }

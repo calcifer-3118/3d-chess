@@ -2,9 +2,8 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import * as dat from 'dat.gui';
-import { Vector2 } from 'three';
+import { Vector2, Vector3 } from 'three';
 import gsap from 'gsap';
 
 /**
@@ -56,35 +55,6 @@ camera.position.y = 6
 camera.position.z = 5;
 scene.add(camera)
 
-let topView = false;
-document.addEventListener('keydown', function (event) {
-    if (event.keyCode == 17) {
-        if (!topView) {
-            // controls.enabled = false
-            pieces.forEach((piece) => {
-                gsap.to(piece.rotation, { x: Math.PI, duration: 3 })
-                piece.position.y = 0.1;
-            })
-
-            camera.position.set(0, 8, 0)
-        
-            topView = true;
-        }
-        else { 
-            pieces.forEach((piece) => {
-                gsap.to(piece.rotation, { x: 0, duration: 3 })
-                piece.position.y = 0;
-            })
-
-            camera.position.set(5, 4, 8)
-            topView = false;
-         }
-    
-    
-        
-    }
-});
-
 // Controls
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
@@ -105,23 +75,18 @@ dirLight.position.set( 75, 300, -75 );
 scene.add( dirLight );
 
 
-
-const loader = new GLTFLoader();
-const fbxLoader = new FBXLoader()
 /**
- * Background
+ * Loading Models
  */
-// fbxLoader.load('/background/room/uploads_files_2421249_TV+Room+by+Deline.FBX', (room) => {
-//     scene.add(room);
-// })
-
+//Table
+const loader = new GLTFLoader();
 loader.load('/background/table/table.gltf', (table) => {
     table.scene.scale.set(18,18,18)
     table.scene.position.set(1.4455871319605489, -13.33, -1.155686279147055);
     scene.add(table.scene)
 
 })
-
+//Chess Board
 const loadBoard = (url) => {
     loader.load(url,
         (model) => {
@@ -130,8 +95,9 @@ const loadBoard = (url) => {
             scene.add(model.scene)
         })
 }
-loadBoard('/chess_board__pieces/untitled.glb')
+loadBoard('/chess_board/untitled.glb')
 
+//Chess_BasePlane => Required
 const createPlane = (dimensions) => {
     const plane = new THREE.Mesh(
         new THREE.PlaneBufferGeometry(dimensions.x, dimensions.y),
@@ -143,18 +109,15 @@ const createPlane = (dimensions) => {
    
     plane.rotateX(-Math.PI / 2);
     scene.add(plane);
-
     return plane;
 }
-
 const plane = createPlane({ x: 8, y: 8 }, 1)
 plane.position.y = 0.02;
-plane.name = 'ground'
+plane.name = 'ground' //Required to check if raycaster hits a piece...
 
 
 
-
-const pieces = [];
+let pieces = [];
 const loadModels = (url, scale, position, attr) => {
     loader.load(url,
         (model) => {
@@ -165,21 +128,26 @@ const loadModels = (url, scale, position, attr) => {
            
             model.scene.traverse(o => {
                 if (o.isMesh) {
+                    //mark draggable
+                    o.userData.draggable = true;
+
                     if (attr.color === 'white') {
-                        o.userData.draggable = true;
                         o.material.color = new THREE.Color(0xCC9544)
                     }
                     else {
-                        o.userData.draggable = true;
                         o.material.color = new THREE.Color(0x413F42)
                     }
                 }
                 // ...
               });
 
-            //mark draggable
+              model.scene.children[0].traverse((o)=>{
+                if(typeof o == 'object'){
+                    o.position.set(0,0,0)
+                }
+              })
+
             model.scene.userData.color = attr.color;
-            model.scene.userData.draggable = true;
 
                 
             scene.add(model.scene);
@@ -339,9 +307,9 @@ const loadPieces = (rook, knight, bishop, king, queen, pawn , attr) => {
 }
    
 loadPieces(
-    { url: '/chessPieces/rook.gltf' ,    1: { x: -3.5, y: 0, z: -3.5, }, 2: { x: 3.5, y: 0,  z: -3.5} },
+    { url: '/chessPieces/rook.gltf' ,    1: { x: -3.5, y: 0, z: -3.5, }, 2: { x:  3.5, y: 0, z: -3.5} },
     { url: '/chessPieces/knight.gltf' ,  1: { x:  2.5, y: 0, z: -3.5, }, 2: { x: -2.5, y: 0, z: -3.5} },
-    { url: '/chessPieces/bishop.gltf' ,  1: { x:  1.5, y: 0,z:  -3.5, }, 2: { x: -1.5, y: 0, z: -3.5} },
+    { url: '/chessPieces/bishop.gltf' ,  1: { x:  1.5, y: 0, z: -3.5, }, 2: { x: -1.5, y: 0, z: -3.5} },
     { url: '/chessPieces/king.gltf'   ,       x:  0.5, y: 0, z: -3.5  },
     { url: '/chessPieces/queen.gltf' ,        x: -0.5, y: 0, z: -3.5},
     { url: '/chessPieces/pawn.gltf', x: -3.5, y: 0, z: -2.5 },
@@ -350,24 +318,27 @@ loadPieces(
     
 loadPieces(
     { url: '/chessPieces/rook.gltf' ,    1: { x: -3.5, y: 0, z: 3.5, }, 2: { x: 3.5, y: 0,  z: 3.5} },
-    { url: '/chessPieces/knight.gltf' ,  1: { x:  2.5, y: 0, z: 3.5, }, 2: { x: -2.5, y: 0, z: 3.5} },
-    { url: '/chessPieces/bishop.gltf' ,  1: { x:  1.5, y: 0,z:  3.5, }, 2: { x: -1.5, y: 0, z: 3.5} },
-    { url: '/chessPieces/king.gltf'   ,       x:  -0.5, y: 0, z: 3.5  },
-    { url: '/chessPieces/queen.gltf' ,        x:   0.5, y: 0, z: 3.5},
+    { url: '/chessPieces/knight.gltf' ,  1: { x:  2.5, y: 0, z: 3.5, }, 2: { x:-2.5, y: 0, z: 3.5} },
+    { url: '/chessPieces/bishop.gltf' ,  1: { x:  1.5, y: 0, z: 3.5, }, 2: { x:-1.5, y: 0, z: 3.5} },
+    { url: '/chessPieces/king.gltf'   ,       x: -0.5, y: 0, z: 3.5  },
+    { url: '/chessPieces/queen.gltf' ,        x:  0.5, y: 0, z: 3.5},
     { url: '/chessPieces/pawn.gltf', x: -3.5, y: 0, z: 2.5 },
     {color:'black'}
 )
 
 
-    
-const player = createPlane({ x: 0.96, y: 1 } ,1);
-player.position.y = 0.001;
-player.material.visible = false;
-player.material.color = new THREE.Color(0xff0000);
+//Highlights piece position
+const highlight = createPlane({ x: 0.96, y: 1 } ,1);
+highlight.position.y = 0.001;
+highlight.material.visible = false;
+highlight.material.color = new THREE.Color(0x00ff00);
 
 
 
 
+/**
+ * Main Logic
+ */
 const mousePosition = new Vector2();
 const mouseMove = new Vector2();
 const raycaster = new THREE.Raycaster();
@@ -376,6 +347,34 @@ window.addEventListener('mousemove', (e) => {
     mouseMove.x = (e.clientX / window.innerWidth) * 2 -1;
     mouseMove.y = -(e.clientY / window.innerHeight) * 2 + 1;
 })
+
+//Changes view on pressing ctlr key (keycode == 17)
+let topView = false;
+document.addEventListener('keydown', function (event) {
+    if (event.keyCode == 17) {
+        if (!topView) {
+            // controls.enabled = false
+            pieces.forEach((piece) => {
+                gsap.to(piece.rotation, { x: Math.PI, duration: 3 })
+                piece.position.y = 0.1;
+            })
+
+            camera.position.set(0, 8, 0)
+        
+            topView = true;
+        }
+        else { 
+            pieces.forEach((piece) => {
+                gsap.to(piece.rotation, { x: 0, duration: 3 })
+                piece.position.y = 0;
+            })
+
+            camera.position.set(5, 4, 8)
+            topView = false;
+         }
+    
+    }
+});
 
 let draggable;
 let tempDraggable;
@@ -390,11 +389,11 @@ window.addEventListener('click', (e) => {
     const found = raycaster.intersectObjects(scene.children, true)
     if (found.length > 0 && found[0].object.userData.draggable) {
         draggable = found[0].object.parent.parent;
-        console.log(draggable)
+        // draggable.userData.position = draggable.position;
+        pieces = pieces.filter(item => item !== draggable)
     }
     if (placeItems) {
         draggable = null;
-
         
         if (!topView) {
             if (tempDraggable.userData.color === 'white') {
@@ -448,6 +447,7 @@ window.addEventListener('click', (e) => {
 })
 
 
+
 const dragObj = () => {
     if (draggable) {
         raycaster.setFromCamera(mouseMove, camera);
@@ -456,23 +456,44 @@ const dragObj = () => {
     intersects.forEach((intersect) => {
         if (intersect.object.name === 'ground') {
             const position = new THREE.Vector3().copy(intersect.point).floor().addScalar(0.5)
-            player.position.set(position.x, player.position.y, position.z)
-            player.material.visible = true;
+            highlight.position.set(position.x, highlight.position.y, position.z)
+            highlight.material.visible = true;
 
-
-            draggable.parent.userData.position = { x: position.x + 3.0, y: position.z - 2.6 }
-
-                draggable.position.x = player.position.x;
-                draggable.position.z = player.position.z;
+            pieces.forEach((piece)=>{
+                // console.log(`pos:${position} && piece_pos:${piece.position}`)
                 
-            tempDraggable = draggable;
+                    if(draggable.position.equals(piece.position)){
+                        
+                        highlight.material.color = new THREE.Color(0xff0000);
+                        placeItems = false;
+
+                    }
+                    
+                    else{
+                       
+                    draggable.position.z = highlight.position.z;
+                    draggable.position.x = highlight.position.x;
+
+                    tempDraggable = draggable;
+                    placeItems = true;
+
+                    highlight.material.color = new THREE.Color(0x00ff00);
+                    }
+                
+                   
+                
+            })
+                
             
-            placeItems = true;
               
         }
     })        
 }
 }
+
+
+
+
 
 /**
  * Renderer
