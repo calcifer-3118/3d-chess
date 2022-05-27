@@ -3,8 +3,9 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import * as dat from 'dat.gui';
-import { Vector2, Vector3 } from 'three';
+import { EquirectangularReflectionMapping, Vector2, Vector3 } from 'three';
 import gsap from 'gsap';
+import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader'
 
 /**
  * Base
@@ -13,7 +14,7 @@ import gsap from 'gsap';
 const canvas = document.querySelector('canvas.webgl')
 
 //Debugging
-const gui = new dat.GUI();
+// const gui = new dat.GUI();
 
 
 // Scene
@@ -58,21 +59,31 @@ scene.add(camera)
 // Controls
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
+controls.maxPolarAngle = Math.PI / 2;
+controls.minDistance = 10;
+controls.maxDistance = 12;
 
 /**
  * Lights
  */
-const ambLight = new THREE.AmbientLight(0xffffff, 1);
-scene.add(ambLight)
-// const pointLight = new THREE.PointLight(0xffffff, 2);
-// scene.add(pointLight)
-var hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444 );
-hemiLight.position.set( 0, 300, 0 );
-scene.add( hemiLight );
+// const ambLight = new THREE.AmbientLight(0xffffff, 1);
+// scene.add(ambLight)
+// // const pointLight = new THREE.PointLight(0xffffff, 2);
+// // scene.add(pointLight)
+// var hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444 );
+// hemiLight.position.set( 0, 300, 0 );
+// scene.add( hemiLight );
 
-var dirLight = new THREE.DirectionalLight( 0xffffff, 3 );
-dirLight.position.set( 75, 300, -75 );
-scene.add( dirLight );
+// var dirLight = new THREE.DirectionalLight( 0xffffff, 3 );
+// dirLight.position.set( 75, 300, -75 );
+// scene.add( dirLight );
+
+const envMapLoader = new RGBELoader();
+envMapLoader.load('/env.hdr', (env)=>{
+    env.mapping = EquirectangularReflectionMapping;
+    scene.background = env;
+    scene.environment = env
+})
 
 
 /**
@@ -504,7 +515,8 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-// renderer.setClearColor(0xff0000)
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
 
 /**
  * Animate
