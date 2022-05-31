@@ -21,7 +21,7 @@ Three.JS, JavaScript, Gsap , Blender
 ## Screenshots
 
 ![App Screenshot](https://i.ibb.co/QK3FxRH/Screenshot-78.png)
-![App Screenshot](https://i.ibb.co/Sy4gtRK/Screenshot-76.png)
+![App Screenshot](https://i.ibb.co/zSdYz36/Screenshot-76.png)
 ![App Screenshot](https://i.ibb.co/GPT8n48/Screenshot-75.png)
 ![App Screenshot](https://i.ibb.co/8d550Mc/Screenshot-73.png)
 
