@@ -14,6 +14,9 @@ Play it in your browser
 
 - [@calcifer-3118](https://www.github.com/calcifer-3118)
 
+## Models from
+- [Polyfjord](https://www.youtube.com/watch?v=fxe9KbWtCQ0&ab_channel=Polyfjord)
+
 
 ## 🛠 Skills
 Three.JS, JavaScript, Gsap , Blender
