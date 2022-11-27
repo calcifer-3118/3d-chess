@@ -79,7 +79,7 @@ controls.maxDistance = 12;
 // scene.add( dirLight );
 
 const envMapLoader = new RGBELoader();
-envMapLoader.load('/env.hdr', (env)=>{
+envMapLoader.load('https://calcifer-3118.github.io/3d-chess/env.hdr', (env)=>{
     env.mapping = EquirectangularReflectionMapping;
     scene.background = env;
     scene.environment = env
@@ -91,7 +91,7 @@ envMapLoader.load('/env.hdr', (env)=>{
  */
 //Table
 const loader = new GLTFLoader();
-loader.load('/background/table/table.gltf', (table) => {
+loader.load('https://calcifer-3118.github.io/3d-chess/background/table/table.gltf', (table) => {
     table.scene.scale.set(18,18,18)
     table.scene.position.set(1.4455871319605489, -13.33, -1.155686279147055);
     scene.add(table.scene)
@@ -106,7 +106,7 @@ const loadBoard = (url) => {
             scene.add(model.scene)
         })
 }
-loadBoard('/chess_board/untitled.glb')
+loadBoard('https://calcifer-3118.github.io/3d-chess/chess_board/untitled.glb')
 
 //Chess_BasePlane => Required
 const createPlane = (dimensions) => {
@@ -160,7 +160,7 @@ const loadModels = (url, scale, position, attr) => {
 
             model.scene.userData.color = attr.color;
 
-                
+            document.getElementById('loader').style.display = 'none';    
             scene.add(model.scene);
     })
 }
@@ -318,22 +318,22 @@ const loadPieces = (rook, knight, bishop, king, queen, pawn , attr) => {
 }
    
 loadPieces(
-    { url: '/chessPieces/rook.gltf' ,    1: { x: -3.5, y: 0, z: -3.5, }, 2: { x:  3.5, y: 0, z: -3.5} },
-    { url: '/chessPieces/knight.gltf' ,  1: { x:  2.5, y: 0, z: -3.5, }, 2: { x: -2.5, y: 0, z: -3.5} },
-    { url: '/chessPieces/bishop.gltf' ,  1: { x:  1.5, y: 0, z: -3.5, }, 2: { x: -1.5, y: 0, z: -3.5} },
-    { url: '/chessPieces/king.gltf'   ,       x:  0.5, y: 0, z: -3.5  },
-    { url: '/chessPieces/queen.gltf' ,        x: -0.5, y: 0, z: -3.5},
-    { url: '/chessPieces/pawn.gltf', x: -3.5, y: 0, z: -2.5 },
+    { url: 'https://calcifer-3118.github.io/3d-chess/chessPieces/rook.gltf' ,    1: { x: -3.5, y: 0, z: -3.5, }, 2: { x:  3.5, y: 0, z: -3.5} },
+    { url: 'https://calcifer-3118.github.io/3d-chess/chessPieces/knight.gltf' ,  1: { x:  2.5, y: 0, z: -3.5, }, 2: { x: -2.5, y: 0, z: -3.5} },
+    { url: 'https://calcifer-3118.github.io/3d-chess/chessPieces/bishop.gltf' ,  1: { x:  1.5, y: 0, z: -3.5, }, 2: { x: -1.5, y: 0, z: -3.5} },
+    { url: 'https://calcifer-3118.github.io/3d-chess/chessPieces/king.gltf'   ,       x:  0.5, y: 0, z: -3.5  },
+    { url: 'https://calcifer-3118.github.io/3d-chess/chessPieces/queen.gltf' ,        x: -0.5, y: 0, z: -3.5},
+    { url: 'https://calcifer-3118.github.io/3d-chess/chessPieces/pawn.gltf', x: -3.5, y: 0, z: -2.5 },
     { color: 'white' }
 )
     
 loadPieces(
-    { url: '/chessPieces/rook.gltf' ,    1: { x: -3.5, y: 0, z: 3.5, }, 2: { x: 3.5, y: 0,  z: 3.5} },
-    { url: '/chessPieces/knight.gltf' ,  1: { x:  2.5, y: 0, z: 3.5, }, 2: { x:-2.5, y: 0, z: 3.5} },
-    { url: '/chessPieces/bishop.gltf' ,  1: { x:  1.5, y: 0, z: 3.5, }, 2: { x:-1.5, y: 0, z: 3.5} },
-    { url: '/chessPieces/king.gltf'   ,       x: -0.5, y: 0, z: 3.5  },
-    { url: '/chessPieces/queen.gltf' ,        x:  0.5, y: 0, z: 3.5},
-    { url: '/chessPieces/pawn.gltf', x: -3.5, y: 0, z: 2.5 },
+    { url: 'https://calcifer-3118.github.io/3d-chess/chessPieces/rook.gltf' ,    1: { x: -3.5, y: 0, z: 3.5, }, 2: { x: 3.5, y: 0,  z: 3.5} },
+    { url: 'https://calcifer-3118.github.io/3d-chess/chessPieces/knight.gltf' ,  1: { x:  2.5, y: 0, z: 3.5, }, 2: { x:-2.5, y: 0, z: 3.5} },
+    { url: 'https://calcifer-3118.github.io/3d-chess/chessPieces/bishop.gltf' ,  1: { x:  1.5, y: 0, z: 3.5, }, 2: { x:-1.5, y: 0, z: 3.5} },
+    { url: 'https://calcifer-3118.github.io/3d-chess/chessPieces/king.gltf'   ,       x: -0.5, y: 0, z: 3.5  },
+    { url: 'https://calcifer-3118.github.io/3d-chess/chessPieces/queen.gltf' ,        x:  0.5, y: 0, z: 3.5},
+    { url: 'https://calcifer-3118.github.io/3d-chess/chessPieces/pawn.gltf', x: -3.5, y: 0, z: 2.5 },
     {color:'black'}
 )
 
