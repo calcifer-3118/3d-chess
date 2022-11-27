@@ -1,0 +1,11 @@
+Model Information:
+* title:	Chess board & pieces
+* source:	https://sketchfab.com/3d-models/chess-board-pieces-829e0fc85ec244eaa3d86310f6ef0150
+* author:	popup_0509 (https://sketchfab.com/popup_0509)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Chess board & pieces" (https://sketchfab.com/3d-models/chess-board-pieces-829e0fc85ec244eaa3d86310f6ef0150) by popup_0509 (https://sketchfab.com/popup_0509) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
